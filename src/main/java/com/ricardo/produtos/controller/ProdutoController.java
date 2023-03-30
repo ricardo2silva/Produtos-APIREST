@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -24,7 +25,7 @@ public class ProdutoController {
 
     @PostMapping("/adicionar")
     @ApiOperation(value = "Salva um produto")
-    public ResponseEntity<Produto> salvarProduto(@RequestBody Produto produto){
+    public ResponseEntity<Produto> salvarProduto(@RequestBody @Valid Produto produto){
         Produto product = service.saveProduto(produto);
         return ResponseEntity.status(HttpStatus.CREATED).body(product);
     }
@@ -41,9 +42,9 @@ public class ProdutoController {
         return ResponseEntity.status(HttpStatus.OK).body(produtos);
     }
     @ApiOperation(value = "Atualiza um produto")
-    @PutMapping("atualizar-produto")
-    public ResponseEntity<Produto> atualizarProduto(@RequestBody Produto produto) {
-        Produto produtoUpdate = service.updateProduto(produto);
+    @PutMapping("atualizar-produto/{id}")
+    public ResponseEntity<Produto> atualizarProduto(@PathVariable Long id, @RequestBody Produto produto) {
+        Produto produtoUpdate = service.updateProduto(produto, id);
         return ResponseEntity.status(HttpStatus.OK).body(produtoUpdate);
     }
     @ApiOperation(value = "Deleta um produto")
